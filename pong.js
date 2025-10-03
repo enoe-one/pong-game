@@ -8,7 +8,11 @@ window.onload = function() {
     const difficultySelect = document.getElementById('difficulty-select');
     const difficultyButtons = document.querySelectorAll('.difficulty');
 
-    let gameMode = null; // '1p' ou '2p'
+   
+    menu.style.opacity = "0";
+    setTimeout(() => { menu.style.opacity = "1"; menu.style.transition = "opacity 1.2s"; }, 150);
+
+    let gameMode = null;
     let difficulty = 'noob';
 
     const DIFFICULTY_SPEED = {
@@ -17,13 +21,14 @@ window.onload = function() {
         modere: 4,
         fort: 5,
         excellent: 6,
-        thegod: 15
+        thegod: 8
     };
 
     btn1p.onclick = () => {
         btn1p.style.display = 'none';
         btn2p.style.display = 'none';
         difficultySelect.style.display = 'block';
+        difficultySelect.style.animation = "fade-in 0.7s";
     };
 
     difficultyButtons.forEach(btn => {
@@ -37,12 +42,27 @@ window.onload = function() {
         startGame('2p');
     };
 
-
-    let paddleHeight = 80, paddleWidth = 12;
-    let ballSize = 12;
+  
+    let paddleHeight = 90, paddleWidth = 16;
+    let ballSize = 14;
     let p1Y, p2Y, ballX, ballY, ballVX, ballVY;
     let p1Score = 0, p2Score = 0;
     let playing = false;
+    let bgParticles = [];
+
+    function initParticles() {
+        bgParticles = [];
+        for(let i=0; i<32; i++) {
+            bgParticles.push({
+                x: Math.random()*canvas.width,
+                y: Math.random()*canvas.height,
+                r: Math.random()*2 + 1.5,
+                vx: (Math.random()-0.5)*0.7,
+                vy: (Math.random()-0.5)*0.7,
+                color: `rgba(0,255,255,${Math.random()*0.5+0.3})`
+            });
+        }
+    }
 
     function resetGame() {
         p1Y = canvas.height / 2 - paddleHeight / 2;
@@ -54,6 +74,7 @@ window.onload = function() {
         p1Score = 0;
         p2Score = 0;
         playing = true;
+        initParticles();
     }
 
     function startGame(mode) {
@@ -65,51 +86,98 @@ window.onload = function() {
         window.requestAnimationFrame(gameLoop);
     }
 
- 
     let keys = {};
     window.addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; });
     window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
+    function drawBg() {
+        let grd = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 60, canvas.width/2, canvas.height/2, canvas.width/2);
+        grd.addColorStop(0, "rgba(0,255,255,0.09)");
+        grd.addColorStop(1, "rgba(30,25,60,0.9)");
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+
+        for(let p of bgParticles) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+
+            p.x += p.vx;
+            p.y += p.vy;
+            if(p.x < 0) p.x = canvas.width;
+            if(p.x > canvas.width) p.x = 0;
+            if(p.y < 0) p.y = canvas.height;
+            if(p.y > canvas.height) p.y = 0;
+        }
+    }
+
     function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBg();
 
-        ctx.setLineDash([10, 10]);
-        ctx.strokeStyle = "#fff";
-        ctx.beginPath();
-        ctx.moveTo(canvas.width/2, 0);
-        ctx.lineTo(canvas.width/2, canvas.height);
-        ctx.stroke();
-        ctx.setLineDash([]);
 
- 
+        for(let i=0; i<canvas.height; i+=32) {
+            ctx.save();
+            ctx.globalAlpha = 0.11 + (i%64==0 ? 0.18 : 0);
+            ctx.fillStyle = "#00fff0";
+            ctx.fillRect(canvas.width/2 - 2, i, 4, 22);
+            ctx.restore();
+        }
+
+
+        ctx.save();
+        ctx.shadowColor = "#00fff0";
+        ctx.shadowBlur = 18;
+        ctx.fillStyle = "#00fff0";
+        ctx.fillRect(28, p1Y, paddleWidth, paddleHeight);
+        ctx.fillRect(canvas.width-28-paddleWidth, p2Y, paddleWidth, paddleHeight);
+        ctx.restore();
+
+        ctx.save();
+        ctx.shadowColor = "#fff";
+        ctx.shadowBlur = 12;
         ctx.fillStyle = "#fff";
-        ctx.fillRect(20, p1Y, paddleWidth, paddleHeight);
-        ctx.fillRect(canvas.width-32, p2Y, paddleWidth, paddleHeight);
-
-  
         ctx.beginPath();
         ctx.arc(ballX, ballY, ballSize, 0, Math.PI*2);
         ctx.fill();
+        ctx.restore();
 
-   
-        ctx.font = "40px Arial";
-        ctx.fillText(p1Score, canvas.width/2 - 80, 50);
-        ctx.fillText(p2Score, canvas.width/2 + 40, 50);
+
+        ctx.save();
+        ctx.font = "bold 55px Orbitron, Arial";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#00fff0";
+        ctx.shadowColor = "#fff";
+        ctx.shadowBlur = 10;
+        ctx.fillText(p1Score, canvas.width/2 - 90, 65);
+        ctx.fillText(p2Score, canvas.width/2 + 90, 65);
+        ctx.restore();
+
+
+        ctx.save();
+        ctx.font = "18px Orbitron, Arial";
+        ctx.fillStyle = "#fff";
+        ctx.globalAlpha = 0.7;
+        ctx.fillText("Joueur 1: ↑ ↓", 105, canvas.height-18);
+        if(gameMode === '2p')
+            ctx.fillText("Joueur 2: Z S", canvas.width-105, canvas.height-18);
+        ctx.restore();
     }
 
     function movePaddles() {
-     
-        if (keys['z']) p1Y -= 6;
-        if (keys['s']) p1Y += 6;
+
+        if (keys['arrowup']) p1Y -= 7;
+        if (keys['arrowdown']) p1Y += 7;
         p1Y = Math.max(0, Math.min(canvas.height-paddleHeight, p1Y));
 
         if (gameMode === '2p') {
-        
-            if (keys['arrowup']) p2Y -= 6;
-            if (keys['arrowdown']) p2Y += 6;
+
+            if (keys['z']) p2Y -= 7;
+            if (keys['s']) p2Y += 7;
             p2Y = Math.max(0, Math.min(canvas.height-paddleHeight, p2Y));
         } else {
-   
+
             let iaSpeed = DIFFICULTY_SPEED[difficulty];
             if (ballY < p2Y + paddleHeight/2) p2Y -= iaSpeed;
             if (ballY > p2Y + paddleHeight/2) p2Y += iaSpeed;
@@ -121,20 +189,18 @@ window.onload = function() {
         ballX += ballVX;
         ballY += ballVY;
 
-      
         if (ballY - ballSize < 0 || ballY + ballSize > canvas.height) ballVY *= -1;
 
-       
-        if (ballX - ballSize < 32 && ballY > p1Y && ballY < p1Y + paddleHeight) {
+        if (ballX - ballSize < 28 + paddleWidth && ballY > p1Y && ballY < p1Y + paddleHeight && ballVX < 0) {
             ballVX *= -1.1;
-            ballVY += (Math.random()-0.5)*2;
-            ballX = 32 + ballSize;
+            ballVY += (Math.random()-0.5)*2.5;
+            ballX = 28 + paddleWidth + ballSize;
         }
         
-        if (ballX + ballSize > canvas.width-32 && ballY > p2Y && ballY < p2Y + paddleHeight) {
+        if (ballX + ballSize > canvas.width-28-paddleWidth && ballY > p2Y && ballY < p2Y + paddleHeight && ballVX > 0) {
             ballVX *= -1.1;
-            ballVY += (Math.random()-0.5)*2;
-            ballX = canvas.width-32 - ballSize;
+            ballVY += (Math.random()-0.5)*2.5;
+            ballX = canvas.width-28-paddleWidth - ballSize;
         }
 
        
