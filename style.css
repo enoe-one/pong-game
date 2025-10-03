@@ -1,39 +1,98 @@
 body {
-    background: #111;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    text-align: center;
+    background: #141325;
     margin: 0;
+    min-height: 100vh;
+    font-family: 'Orbitron', Arial, sans-serif;
+    overflow: hidden;
+}
+@import url('https://fonts.googleapis.com/css?family=Orbitron:900');
+
+#game-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at center, #1e1e40 80%, #000 100%);
+    animation: bgPulse 3s infinite alternate;
+}
+@keyframes bgPulse {
+    0%   {filter: brightness(1);}
+    100% {filter: brightness(1.2);}
 }
 
-#menu {
-    margin-top: 100px;
+.menu {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-top: 80px;
 }
 
-button {
-    margin: 10px;
-    padding: 15px 25px;
-    font-size: 1.1em;
-    border-radius: 8px;
-    border: none;
-    background: #333;
+.pong-title {
+    font-size: 5em;
+    color: #00fff0;
+    text-shadow: 0 0 20px #00fff0, 0 0 40px #00fff0;
+    letter-spacing: 0.15em;
+    margin-bottom: 24px;
+    font-family: 'Orbitron', Arial, sans-serif;
+    animation: neon-flicker 2.5s infinite alternate;
+}
+@keyframes neon-flicker {
+    0% {text-shadow: 0 0 20px #00fff0, 0 0 40px #00fff0;}
+    60% {text-shadow: 0 0 28px #00fff0, 0 0 60px #00fff0;}
+    80% {text-shadow: 0 0 18px #00fff0;}
+    100% {text-shadow: 0 0 25px #00fff0, 0 0 50px #00fff0;}
+}
+
+.menu-buttons, .difficulty-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.neon-btn {
+    background: transparent;
     color: #fff;
+    border: 2px solid #00fff0;
+    padding: 16px 34px;
+    font-size: 1.3em;
+    border-radius: 12px;
+    box-shadow: 0 0 10px #00fff0, 0 0 30px #00fff0 inset;
+    transition: box-shadow 0.2s, border 0.2s, color 0.2s;
     cursor: pointer;
-    transition: background 0.2s;
+    font-family: 'Orbitron', Arial, sans-serif;
+    outline: none;
+    position: relative;
+}
+.neon-btn:hover, .neon-btn:focus {
+    color: #141325;
+    background: #00fff0;
+    box-shadow: 0 0 22px #00fff0, 0 0 50px #00fff0 inset;
+    border: 2px solid #fff;
+    text-shadow: none;
 }
 
-button:hover {
-    background: #555;
+.difficulty-menu h2 {
+    color: #fff;
+    margin-bottom: 16px;
+    font-size: 1.8em;
+    text-shadow: 0 0 8px #00fff0;
 }
 
-#difficulty-select {
-    margin-top: 30px;
+.credit {
+    color: #ccc;
+    font-size: 1.1em;
+    margin-top: 40px;
 }
 
 canvas {
     display: block;
-    margin: 30px auto;
-    background: #222;
-    border: 4px solid #fff;
-    border-radius: 10px;
+    margin: 35px auto;
+    background: #181a30;
+    border: 6px solid #00fff0;
+    border-radius: 16px;
+    box-shadow: 0 0 35px #00fff0;
+    z-index: 2;
+    position: relative;
 }
+
