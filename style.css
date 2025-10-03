@@ -1,0 +1,39 @@
+body {
+    background: #111;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+}
+
+#menu {
+    margin-top: 100px;
+}
+
+button {
+    margin: 10px;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    border-radius: 8px;
+    border: none;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #555;
+}
+
+#difficulty-select {
+    margin-top: 30px;
+}
+
+canvas {
+    display: block;
+    margin: 30px auto;
+    background: #222;
+    border: 4px solid #fff;
+    border-radius: 10px;
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Pong Jeu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menu">
+        <h1>PONG</h1>
+        <button id="btn-1p">1 Joueur</button>
+        <button id="btn-2p">2 Joueurs</button>
+        <div id="difficulty-select" style="display:none;">
+            <h2>Choisis la difficulté :</h2>
+            <button class="difficulty" data-level="noob">Noob</button>
+            <button class="difficulty" data-level="faible">Faible</button>
+            <button class="difficulty" data-level="modere">Modérée</button>
+            <button class="difficulty" data-level="fort">Fort</button>
+            <button class="difficulty" data-level="excellent">Excellent</button>
+            <button class="difficulty" data-level="thegod">The God</button>
+        </div>
+    </div>
+    <canvas id="gameCanvas" width="800" height="500" style="display:none;"></canvas>
+    <script src="pong.js"></script>
+</body>
+</html>
