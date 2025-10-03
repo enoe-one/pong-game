@@ -6,20 +6,26 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="menu">
-        <h1>PONG</h1>
-        <button id="btn-1p">1 Joueur</button>
-        <button id="btn-2p">2 Joueurs</button>
-        <div id="difficulty-select" style="display:none;">
-            <h2>Choisis la difficulté :</h2>
-            <button class="difficulty" data-level="noob">Noob</button>
-            <button class="difficulty" data-level="faible">Faible</button>
-            <button class="difficulty" data-level="modere">Modérée</button>
-            <button class="difficulty" data-level="fort">Fort</button>
-            <button class="difficulty" data-level="excellent">Excellent</button>
-            <button class="difficulty" data-level="thegod">The God</button>
+    <div id="menu" class="menu">
+        <h1 class="pong-title">PONG</h1>
+        <div class="menu-buttons">
+            <button id="btn-1p" class="neon-btn">1 Joueur</button>
+            <button id="btn-2p" class="neon-btn">2 Joueurs</button>
         </div>
+        <div id="difficulty-select" class="difficulty-menu" style="display:none;">
+            <h2>Choisis la difficulté :</h2>
+            <div class="difficulty-buttons">
+                <button class="difficulty neon-btn" data-level="noob">Noob</button>
+                <button class="difficulty neon-btn" data-level="faible">Faible</button>
+                <button class="difficulty neon-btn" data-level="modere">Modérée</button>
+                <button class="difficulty neon-btn" data-level="fort">Fort</button>
+                <button class="difficulty neon-btn" data-level="excellent">Excellent</button>
+                <button class="difficulty neon-btn" data-level="thegod">The God</button>
+            </div>
+        </div>
+        <div class="credit">Créé par <b>enoe-one</b> & Co</div>
     </div>
+    <div id="game-bg"></div>
     <canvas id="gameCanvas" width="800" height="500" style="display:none;"></canvas>
     <script src="pong.js"></script>
 </body>
